@@ -51,15 +51,31 @@ const hangmanPics = [`
         |
   =========`]
 
-// Array mit zu ratenden Wörtern
-const words = ['sternschnuppe', 'bildschirm', 'javascript', 'techstarter', 'schreibtisch', 'pflanze', 'katze', 'fernseher', 'schiff', 'schere'];
-
 let word, guessedWord, attempts, guessedLetters; 
 let firstGame = true;
 
+//Funktion um zu überprüfen ob ein Array einen Wert enthält
+function includes(array, value) {
+    for (let i = 0; i < array.length; i++) {
+        if (array[i] === value) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Wörter von der API holen
+async function fetchWords() {
+    const response = await fetch('/api/words');
+    const words = await response.json();
+    return words;
+}
+
 // Funktion um das Spiel zu starten
-function startGame() {
+async function startGame() { // async Funktion, um auf die API zuzugreifen
     
+    const words = await fetchWords(); // Wörter von der API holen
+
     // Rausziehen eines beliebigen Wortes
     word = words[Math.floor(Math.random() * words.length)];
 
@@ -140,14 +156,3 @@ document.getElementById('letter').addEventListener('input', function () {
         setTimeout(startGame, 2000);
     }
 });
-
-    //Funktion um zu überprüfen ob ein Array einen Wert enthält
-function includes(array, value) {
-    for (let i = 0; i < array.length; i++) {
-        if (array[i] === value) {
-            return true;
-        }
-    }
-    return false;
-}
-
